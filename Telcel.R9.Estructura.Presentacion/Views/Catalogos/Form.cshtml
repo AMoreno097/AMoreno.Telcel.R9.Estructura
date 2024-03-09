@@ -1,0 +1,52 @@
+﻿@model Modelo.Empleado
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Formulario Empleado</h1>
+
+<hr />
+@using (Html.BeginForm("Form", "Catalogos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.EmpleadoID)
+    <div class="row">
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Nombre)
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-circle-user" style="color: #000000;"></i></span>
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @placeholder = "Ejemplo: Luis", @onkeyup = "soloLetras(this,'lblNombre')" })
+
+            </div>
+            <label id="lblNombre" style="color:red"></label>
+            @Html.ValidationMessageFor(model => model.Nombre, "", new { @id = "lblNombre", @style = "Color: red" })
+
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Departamento)
+
+            @Html.DropDownListFor(model => model.Departamento.DepartamentoID, new SelectList(Model.Departamento.Departamentos, "DepartamentoID", "Descripcion"), "Selecciona una opción", new { @class = "form-control", @id = "ddlDepartamento" })
+        </div>
+        <div class="col-md-4">
+            @Html.LabelFor(model => model.Puesto)
+
+            @Html.DropDownListFor(model => model.Puesto.PuestoID, new SelectList(Model.Puesto.Puestos, "PuestoID", "Descripcion"), "Selecciona una opción", new { @class = "form-control", @id = "ddlPuesto" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @if (Model.EmpleadoID != 0)
+            {
+                <input type="submit" class="btn btn-info" value="Actualizar" />
+            }
+            else
+            {
+                <input type="submit" class="btn btn-success" value="Agregar" />
+            }
+            @Html.ActionLink("Regresar", "Catalogo", "Catalogos", htmlAttributes: new { @class = "btn btn-danger" })
+        </div>
+        
+    </div>
+}
+
+

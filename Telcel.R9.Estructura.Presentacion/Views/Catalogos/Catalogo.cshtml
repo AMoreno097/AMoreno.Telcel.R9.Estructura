@@ -1,0 +1,74 @@
+﻿@model Modelo.Empleado;
+@{
+    ViewData["Title"] = "Catalogo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Catalogo</h1>
+<div class="row">
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.Departamento)
+
+        @Html.DropDownListFor(model => model.Departamento.DepartamentoID, new SelectList(Model.Departamento.Departamentos, "DepartamentoID", "Descripcion"), "Selecciona una opción", new { @class = "form-control", @id = "ddlDepartamento" })
+    </div>
+    <div class="col-md-3">
+        @Html.LabelFor(model => model.Puesto)
+
+        @Html.DropDownListFor(model => model.Puesto.PuestoID, new SelectList(Model.Puesto.Puestos, "PuestoID", "Descripcion"), "Selecciona una opción", new { @class = "form-control", @id = "ddlPuesto" })
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-3">
+        @using (Html.BeginForm("Catalogo", "Catalogos", FormMethod.Get, new { enctype = "multipart/form-data" }))
+        {
+            <h5>Buscar por Nombre</h5>
+            @Html.LabelFor(model => model.Nombre)
+
+            @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control" })
+
+            <input type="submit" class="btn btn-dark" value="Buscar" />
+        }
+    </div>
+</div>
+<br>
+
+    <div style="float:right;">
+        @Html.ActionLink(" ", "Form", "Catalogos", htmlAttributes: new { @class = "btn btn-success bi bi-person-plus-fill", })
+    </div>
+@if (Model == null)
+{
+    <div class="alert alert-warning" role="alert">
+        Ocurrio Error!
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" id="tabla">
+            <thead class="table-secondary">
+                <tr class="text-center">
+                    <th>Editar</th>
+                    <th>NoEmpleado</th>
+                    <th><i class="fa-solid fa-circle-user" style="color: #000000;"></i> Nombre</th>
+                    <th>Puesto</th>
+                    <th>Departamento</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Modelo.Empleado empleado in Model.Empleados)
+                {
+                    <tr>
+                        <td><a class="btn btn-warning bi bi-pencil" href="@Url.Action("Form", "Catalogos", new { empleadosID = empleado.EmpleadoID})"></a></td>
+                        <td class="text-center">@empleado.EmpleadoID </td>
+                        <td class="text-center">@empleado.Nombre </td>
+                        <td class="text-center">@empleado.Puesto.Descripcion </td>
+                        <td class="text-center">@empleado.Departamento.Descripcion </td>
+                        <td class="text-center"><a href="@Url.Action("Eliminar","Catalogos", new {IdEmpleado = empleado.EmpleadoID} )" class="btn btn-danger"><i class="bi bi-trash" style="color:white"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
